@@ -17,10 +17,10 @@ import logging
 from userlogic import *
 
 # GUI
-from PySide2.QtGui import *
-from PySide2.QtCore import *
-from PySide2.QtWidgets import *
-from PySide2.QtCharts import *
+from PySide6.QtGui import *
+from PySide6.QtCore import *
+from PySide6.QtWidgets import *
+from PySide6.QtCharts import *
 
 
 # region Model (Logic)
@@ -594,7 +594,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.title = 'Alpaca Dashboard!'
         # Get the current screens' dimensions...
-        screen = QDesktopWidget().frameGeometry()
+        screen = QApplication.primaryScreen().availableGeometry()
         # ... and get this windows' dimensions
         mysize = self.geometry()
         # The horizontal position is calulated as screenwidth - windowwidth /2
@@ -1350,11 +1350,11 @@ class BuySellDialog(QDialog):
 
 
 # Chartview
-class ChartView(QtCharts.QChartView):
+class ChartView(QChartView):
     def __init__(self, window):
         super().__init__()
         self.window = window
-        self.setRubberBand(self.HorizontalRubberBand)
+        # self.setRubberBand(self.HorizontalRubberBand)
         # self.setRubberBand(self.RectangleRubberBand)
         self.setMouseTracking(True)
         self.x = 0
@@ -1458,7 +1458,7 @@ class ChartView(QtCharts.QChartView):
                                                     self.window.timeFrame.currentText())
 
 # display chart
-class Chart(QtCharts.QChart):
+class Chart(QChart):
     def __init__(self):
         super().__init__()
         # self.setAnimationOptions(QtCharts.QChart.AllAnimations)
@@ -1487,7 +1487,7 @@ class Chart(QtCharts.QChart):
         except Exception as e:
             pass
         if idx is None:
-            css = QtCharts.QCandlestickSet()
+            css = QCandlestickSet()
             self.cs.remove(self.cs.sets()[0])
             del self.ts[0]
             css.setHigh(high)
@@ -1515,12 +1515,12 @@ class Chart(QtCharts.QChart):
         self.symbol = symbol
 
         # history
-        self.cs = QtCharts.QCandlestickSeries()
+        self.cs = QCandlestickSeries()
         self.cs.setIncreasingColor(Qt.green)
         self.cs.setDecreasingColor(Qt.red)
         self.ts = []
         for row in history.iterrows():
-            css = QtCharts.QCandlestickSet()
+            css = QCandlestickSet()
             css.setHigh(row[1]['high'])
             css.setLow(row[1]['low'])
             css.setOpen(row[1]['open'])
@@ -1538,9 +1538,9 @@ class Chart(QtCharts.QChart):
                 self.ts.append(datetime.strftime(row[0], '%Y-%m-%d %H:%M'))
 
         # closed buy order
-        sscob = QtCharts.QScatterSeries()
+        sscob = QScatterSeries()
         sscob.setName('Closed Buy Orders')
-        sscob.setMarkerShape(QtCharts.QScatterSeries.MarkerShapeCircle)
+        sscob.setMarkerShape(QScatterSeries.MarkerShapeCircle)
         sscob.setMarkerSize(15.0)
         sscob.setPen(QPen(Qt.green))
         if closed_orders is not None:
@@ -1561,9 +1561,9 @@ class Chart(QtCharts.QChart):
                         pass
 
         # closed sell order
-        sscos = QtCharts.QScatterSeries()
+        sscos = QScatterSeries()
         sscos.setName('Closed Sell Orders')
-        sscos.setMarkerShape(QtCharts.QScatterSeries.MarkerShapeCircle)
+        sscos.setMarkerShape(QScatterSeries.MarkerShapeCircle)
         sscos.setMarkerSize(15.0)
         sscos.setPen(QPen(Qt.red))
         if closed_orders is not None:

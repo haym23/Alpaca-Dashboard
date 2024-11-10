@@ -4,7 +4,7 @@
 from datetime import timedelta, datetime, time
 from pytz import timezone
 import pytz
-from PySide2.QtCore import QObject
+from PySide6.QtCore import QObject
 import pandas as df
 import asyncio
 import threading
